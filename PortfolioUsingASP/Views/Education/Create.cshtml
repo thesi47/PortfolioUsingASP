@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model PortfolioUsingASP.Models.Education
+
+@{
+    ViewData["Title"] = "Create Education";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Create Education</h1>
+    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Back</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form asp-action="Create" method="post" class="row g-3">
+
+            <div class="col-md-6">
+                <label asp-for="EduLevel" class="form-label"></label>
+                <input asp-for="EduLevel" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="SubjectOrGroup" class="form-label"></label>
+                <input asp-for="SubjectOrGroup" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Result" class="form-label"></label>
+                <input asp-for="Result" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="PassingYear" class="form-label"></label>
+                <input asp-for="PassingYear" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">Create</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+</div>

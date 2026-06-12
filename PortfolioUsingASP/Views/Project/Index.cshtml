@@ -1,0 +1,32 @@
+﻿@model List<PortfolioUsingASP.Models.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<h2 class="mb-4">My Projects</h2>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-3">
+
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <h5>@item.ProjectName</h5>
+
+                    <p>@item.ProjectDescription</p>
+
+                    <p>
+                        <small class="text-muted">@item.ProjectSkills</small>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+    }
+
+</div>

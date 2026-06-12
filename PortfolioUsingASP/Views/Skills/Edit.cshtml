@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model PortfolioUsingASP.Models.Skills
+
+@{
+    ViewData["Title"] = "Edit Skill";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Edit Skill</h1>
+    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Back to list</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form asp-action="Edit" method="post" class="row g-3">
+
+            <input type="hidden" asp-for="SkillId" />
+
+            <div class="col-md-6">
+                <label asp-for="SkillName" class="form-label"></label>
+                <input asp-for="SkillName" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="SkillLevel" class="form-label"></label>
+                <input asp-for="SkillLevel" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">Update</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

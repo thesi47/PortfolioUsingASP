@@ -1,0 +1,26 @@
+﻿@model List<PortfolioUsingASP.Models.Education>
+
+<h2 class="mb-4">Education</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Level</th>
+            <th>Subject</th>
+            <th>Result</th>
+            <th>Year</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EduLevel</td>
+                <td>@item.SubjectOrGroup</td>
+                <td>@item.Result</td>
+                <td>@item.PassingYear</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,20 @@
+﻿@model List<PortfolioUsingASP.Models.Experience>
+
+<h2 class="mb-4">Experience</h2>
+
+@foreach (var item in Model)
+{
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+
+            <h5>@item.JobTitle - @item.CompanyName</h5>
+
+            <p class="text-muted">
+                @item.StartDate - @item.EndDate
+            </p>
+
+            <p>@item.JobDescription</p>
+
+        </div>
+    </div>
+}

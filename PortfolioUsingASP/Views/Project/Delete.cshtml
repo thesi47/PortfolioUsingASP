@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model PortfolioUsingASP.Models.Project
+
+@{
+    ViewData["Title"] = "Delete Project";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 text-danger">Delete Project</h1>
+    <a class="btn btn-outline-secondary btn-sm" asp-action="Index">Back</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h5>Are you sure you want to delete this project?</h5>
+
+        <dl class="row mt-3">
+            <dt class="col-sm-3">Project Name</dt>
+            <dd class="col-sm-9">@Model.ProjectName</dd>
+
+            <dt class="col-sm-3">Skills</dt>
+            <dd class="col-sm-9">@Model.ProjectSkills</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.ProjectDescription</dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="ProjectId" />
+
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+
+    </div>
+</div>

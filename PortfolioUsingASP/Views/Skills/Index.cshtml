@@ -1,0 +1,31 @@
+﻿@model List<PortfolioUsingASP.Models.Skills>
+
+@{
+    ViewData["Title"] = "Skills";
+}
+
+<h2 class="mb-4">My Skills</h2>
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h5>@item.SkillName</h5>
+
+                    <div class="progress">
+                        <div class="progress-bar"
+                             style="width:@(item.SkillLevel * 10)%">
+                            @item.SkillLevel/10
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

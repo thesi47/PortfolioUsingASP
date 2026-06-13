@@ -9,10 +9,18 @@ namespace PortfolioUsingASP.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View(educationList);
         }
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View();
         }
 
@@ -27,6 +35,10 @@ namespace PortfolioUsingASP.Controllers
 
         public IActionResult Edit(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var edu = educationList.FirstOrDefault(e => e.EduId == id);
 
             if (edu == null)
@@ -53,6 +65,10 @@ namespace PortfolioUsingASP.Controllers
         }
         public IActionResult Delete(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var edu = educationList.FirstOrDefault(e => e.EduId == id);
 
             if (edu == null)

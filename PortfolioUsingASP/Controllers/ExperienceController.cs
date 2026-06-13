@@ -7,22 +7,26 @@ namespace PortfolioUsingASP.Controllers
 {
     public class ExperienceController : Controller
     {
-        // IN-MEMORY LIST
         private static List<Experience> experienceList = new List<Experience>();
 
-        // LIST
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View(experienceList);
         }
 
-        // CREATE - GET
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View();
         }
 
-        // CREATE - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Experience exp)
@@ -33,9 +37,12 @@ namespace PortfolioUsingASP.Controllers
             return RedirectToAction("Index");
         }
 
-        // EDIT - GET
         public IActionResult Edit(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var exp = experienceList.FirstOrDefault(e => e.JobId == id);
 
             if (exp == null)
@@ -44,7 +51,6 @@ namespace PortfolioUsingASP.Controllers
             return View(exp);
         }
 
-        // EDIT - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Experience exp)
@@ -63,9 +69,12 @@ namespace PortfolioUsingASP.Controllers
             return RedirectToAction("Index");
         }
 
-        // DELETE - GET
         public IActionResult Delete(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var exp = experienceList.FirstOrDefault(e => e.JobId == id);
 
             if (exp == null)
@@ -74,7 +83,6 @@ namespace PortfolioUsingASP.Controllers
             return View(exp);
         }
 
-        // DELETE - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Experience exp)

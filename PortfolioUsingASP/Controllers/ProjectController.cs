@@ -7,35 +7,40 @@ namespace PortfolioUsingASP.Controllers
 {
     public class ProjectController : Controller
     {
-        // IN-MEMORY STORAGE
         private static List<Project> projectList = new List<Project>();
-
-        // LIST
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View(projectList);
         }
-
-        // CREATE - GET
         public IActionResult Create()
         {
             return View();
         }
 
-        // CREATE - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Project project)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             project.ProjectId = projectList.Count + 1;
             projectList.Add(project);
 
             return RedirectToAction("Index");
         }
 
-        // EDIT - GET
         public IActionResult Edit(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var project = projectList.FirstOrDefault(p => p.ProjectId == id);
 
             if (project == null)
@@ -44,7 +49,6 @@ namespace PortfolioUsingASP.Controllers
             return View(project);
         }
 
-        // EDIT - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Project project)
@@ -61,9 +65,12 @@ namespace PortfolioUsingASP.Controllers
             return RedirectToAction("Index");
         }
 
-        // DELETE - GET
         public IActionResult Delete(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var project = projectList.FirstOrDefault(p => p.ProjectId == id);
 
             if (project == null)
@@ -72,7 +79,6 @@ namespace PortfolioUsingASP.Controllers
             return View(project);
         }
 
-        // DELETE - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Project project)

@@ -10,11 +10,19 @@ namespace PortfolioUsingASP.Controllers
 
         public IActionResult Index()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View(skills);
         }
 
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             return View();
         }
 
@@ -27,6 +35,10 @@ namespace PortfolioUsingASP.Controllers
         }
         public IActionResult Edit(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var skill = skills.FirstOrDefault(s => s.SkillId == id);
 
             if (skill == null)
@@ -51,6 +63,10 @@ namespace PortfolioUsingASP.Controllers
         }
         public IActionResult Delete(int id)
         {
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var skill = skills.FirstOrDefault(s => s.SkillId == id);
 
             if (skill == null)

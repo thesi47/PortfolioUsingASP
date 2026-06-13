@@ -1,0 +1,55 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="d-flex justify-content-between mb-4">
+
+    <h2>Admin Dashboard</h2>
+
+    <a asp-action="Logout"
+       class="btn btn-danger">
+        Logout
+    </a>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <a asp-controller="Skill"
+           asp-action="Index"
+           class="btn btn-primary w-100">
+            Manage Skills
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a asp-controller="Project"
+           asp-action="Index"
+           class="btn btn-primary w-100">
+            Manage Projects
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a asp-controller="Experience"
+           asp-action="Index"
+           class="btn btn-primary w-100">
+            Manage Experience
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a asp-controller="Education"
+           asp-action="Index"
+           class="btn btn-primary w-100">
+            Manage Education
+        </a>
+    </div>
+
+</div>

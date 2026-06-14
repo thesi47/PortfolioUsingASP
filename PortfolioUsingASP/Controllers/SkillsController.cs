@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PortfolioUsingASP.Models;
-
+using PortfolioUsingASP.Data;
+using PortfolioUsingASP.Entities;
 
 namespace PortfolioUsingASP.Controllers
 {
     public class SkillsController : Controller
     {
-        private static List<Skills> skills = new List<Skills>();
+        private readonly ApplicationDbContext _context;
+
+        public SkillsController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Index()
         {
@@ -14,6 +19,7 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
+            var skills = _context.Skills.ToList();
             return View(skills);
         }
 
@@ -30,16 +36,22 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Skills skill)
         {
-            skills.Add(skill);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.Skills.Add(skill);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         public IActionResult Edit(int id)
         {
             if (HttpContext.Session.GetString("Admin") != "true")
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var skill = skills.FirstOrDefault(s => s.SkillId == id);
+            var skill = _context.Skills.FirstOrDefault(s => s.SkillId == id);
 
             if (skill == null)
                 return NotFound();
@@ -51,23 +63,29 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Skills skill)
         {
-            var existing = skills.FirstOrDefault(s => s.SkillId == skill.SkillId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Skills.FirstOrDefault(s => s.SkillId == skill.SkillId);
 
             if (existing != null)
             {
                 existing.SkillName = skill.SkillName;
                 existing.SkillLevel = skill.SkillLevel;
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
         }
+
         public IActionResult Delete(int id)
         {
             if (HttpContext.Session.GetString("Admin") != "true")
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var skill = skills.FirstOrDefault(s => s.SkillId == id);
+            var skill = _context.Skills.FirstOrDefault(s => s.SkillId == id);
 
             if (skill == null)
                 return NotFound();
@@ -79,15 +97,19 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Skills skill)
         {
-            var existing = skills.FirstOrDefault(s => s.SkillId == skill.SkillId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Skills.FirstOrDefault(s => s.SkillId == skill.SkillId);
 
             if (existing != null)
             {
-                skills.Remove(existing);
+                _context.Skills.Remove(existing);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
         }
-
     }
 }

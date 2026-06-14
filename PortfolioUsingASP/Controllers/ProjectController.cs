@@ -1,21 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PortfolioUsingASP.Models;
-using System.Collections.Generic;
-using System.Linq;
+using PortfolioUsingASP.Data;
+using PortfolioUsingASP.Entities;
 
 namespace PortfolioUsingASP.Controllers
 {
     public class ProjectController : Controller
     {
-        private static List<Project> projectList = new List<Project>();
+        private readonly ApplicationDbContext _context;
+
+        public ProjectController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("Admin") != "true")
             {
                 return RedirectToAction("Login", "Admin");
             }
-            return View(projectList);
+            var projects = _context.Projects.ToList();
+            return View(projects);
         }
+
         public IActionResult Create()
         {
             return View();
@@ -29,9 +36,8 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            project.ProjectId = projectList.Count + 1;
-            projectList.Add(project);
-
+            _context.Projects.Add(project);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -41,7 +47,7 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var project = projectList.FirstOrDefault(p => p.ProjectId == id);
+            var project = _context.Projects.FirstOrDefault(p => p.ProjectId == id);
 
             if (project == null)
                 return NotFound();
@@ -53,13 +59,18 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Project project)
         {
-            var existing = projectList.FirstOrDefault(p => p.ProjectId == project.ProjectId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Projects.FirstOrDefault(p => p.ProjectId == project.ProjectId);
 
             if (existing != null)
             {
                 existing.ProjectName = project.ProjectName;
                 existing.ProjectDescription = project.ProjectDescription;
                 existing.ProjectSkills = project.ProjectSkills;
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
@@ -71,7 +82,7 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var project = projectList.FirstOrDefault(p => p.ProjectId == id);
+            var project = _context.Projects.FirstOrDefault(p => p.ProjectId == id);
 
             if (project == null)
                 return NotFound();
@@ -83,11 +94,16 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Project project)
         {
-            var existing = projectList.FirstOrDefault(p => p.ProjectId == project.ProjectId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Projects.FirstOrDefault(p => p.ProjectId == project.ProjectId);
 
             if (existing != null)
             {
-                projectList.Remove(existing);
+                _context.Projects.Remove(existing);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");

@@ -1,0 +1,48 @@
+PORTFOLIO APPLICATION REFACTORING - COMPLETION CHECKLIST
+========================================================
+
+COMPLETED TASKS:
+✓ 1. Created Entities folder in root with user-made models
+   - PortfolioUsingASP/Entities/Education.cs
+   - PortfolioUsingASP/Entities/Experience.cs
+   - PortfolioUsingASP/Entities/Project.cs
+   - PortfolioUsingASP/Entities/Skills.cs
+   - PortfolioUsingASP/Entities/Profile.cs
+
+✓ 2. Updated ApplicationDbContext
+   - Added DbSet<Education> Educations
+   - Added DbSet<Experience> Experiences
+   - Added DbSet<Project> Projects
+   - Added DbSet<Skills> Skills
+   - Added DbSet<Profile> Profiles
+   - Updated using statements to reference Entities namespace
+
+✓ 3. Removed static data from all controllers
+   - ProjectController: Changed from static List<Project> to DbContext injection
+   - EducationController: Changed from static List<Education> to DbContext injection
+   - ExperienceController: Changed from static List<Experience> to DbContext injection
+   - SkillsController: Changed from static List<Skills> to DbContext injection
+   - All CRUD operations now use _context.SaveChanges()
+
+✓ 4. Build verification
+   - Project builds successfully without errors
+
+NEXT STEPS - RUN THESE COMMANDS IN POWERSHELL:
+==============================================
+
+1. Create a new migration for the portfolio entities:
+   cd "C:\Users\User\source\repos\thesi47\PortfolioUsingASP"
+   dotnet ef migrations add AddPortfolioEntities
+
+2. Update the database with the new migration:
+   dotnet ef database update
+
+3. Build the project to ensure everything compiles:
+   dotnet build
+
+4. Run the application:
+   dotnet run
+
+NOTE: The old Models folder can be deleted once you confirm everything works.
+You may want to update views and other files that reference the old Models namespace,
+but the controllers have already been updated to use the new Entities namespace.

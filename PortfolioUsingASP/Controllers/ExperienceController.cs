@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PortfolioUsingASP.Models;
-using System.Collections.Generic;
-using System.Linq;
+using PortfolioUsingASP.Data;
+using PortfolioUsingASP.Entities;
 
 namespace PortfolioUsingASP.Controllers
 {
     public class ExperienceController : Controller
     {
-        private static List<Experience> experienceList = new List<Experience>();
+        private readonly ApplicationDbContext _context;
+
+        public ExperienceController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Index()
         {
@@ -15,7 +19,8 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            return View(experienceList);
+            var experiences = _context.Experiences.ToList();
+            return View(experiences);
         }
 
         public IActionResult Create()
@@ -31,9 +36,12 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Experience exp)
         {
-            exp.JobId = experienceList.Count + 1;
-
-            experienceList.Add(exp);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.Experiences.Add(exp);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -43,7 +51,7 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var exp = experienceList.FirstOrDefault(e => e.JobId == id);
+            var exp = _context.Experiences.FirstOrDefault(e => e.JobId == id);
 
             if (exp == null)
                 return NotFound();
@@ -55,7 +63,11 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Experience exp)
         {
-            var existing = experienceList.FirstOrDefault(e => e.JobId == exp.JobId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Experiences.FirstOrDefault(e => e.JobId == exp.JobId);
 
             if (existing != null)
             {
@@ -64,6 +76,7 @@ namespace PortfolioUsingASP.Controllers
                 existing.CompanyName = exp.CompanyName;
                 existing.StartDate = exp.StartDate;
                 existing.EndDate = exp.EndDate;
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
@@ -75,7 +88,7 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var exp = experienceList.FirstOrDefault(e => e.JobId == id);
+            var exp = _context.Experiences.FirstOrDefault(e => e.JobId == id);
 
             if (exp == null)
                 return NotFound();
@@ -87,11 +100,16 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Experience exp)
         {
-            var existing = experienceList.FirstOrDefault(e => e.JobId == exp.JobId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Experiences.FirstOrDefault(e => e.JobId == exp.JobId);
 
             if (existing != null)
             {
-                experienceList.Remove(existing);
+                _context.Experiences.Remove(existing);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");

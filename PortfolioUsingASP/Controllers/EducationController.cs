@@ -1,11 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PortfolioUsingASP.Models;
+using PortfolioUsingASP.Data;
+using PortfolioUsingASP.Entities;
 
 namespace PortfolioUsingASP.Controllers
 {
     public class EducationController : Controller
     {
-        private static List<Education> educationList = new List<Education>();
+        private readonly ApplicationDbContext _context;
+
+        public EducationController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Index()
         {
@@ -13,8 +19,10 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            return View(educationList);
+            var educations = _context.Educations.ToList();
+            return View(educations);
         }
+
         public IActionResult Create()
         {
             if (HttpContext.Session.GetString("Admin") != "true")
@@ -28,8 +36,12 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Education edu)
         {
-            edu.EduId = educationList.Count + 1;
-            educationList.Add(edu);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            _context.Educations.Add(edu);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -39,7 +51,7 @@ namespace PortfolioUsingASP.Controllers
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var edu = educationList.FirstOrDefault(e => e.EduId == id);
+            var edu = _context.Educations.FirstOrDefault(e => e.EduId == id);
 
             if (edu == null)
                 return NotFound();
@@ -51,7 +63,11 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Education edu)
         {
-            var existing = educationList.FirstOrDefault(e => e.EduId == edu.EduId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Educations.FirstOrDefault(e => e.EduId == edu.EduId);
 
             if (existing != null)
             {
@@ -59,17 +75,19 @@ namespace PortfolioUsingASP.Controllers
                 existing.SubjectOrGroup = edu.SubjectOrGroup;
                 existing.Result = edu.Result;
                 existing.PassingYear = edu.PassingYear;
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
         }
+
         public IActionResult Delete(int id)
         {
             if (HttpContext.Session.GetString("Admin") != "true")
             {
                 return RedirectToAction("Login", "Admin");
             }
-            var edu = educationList.FirstOrDefault(e => e.EduId == id);
+            var edu = _context.Educations.FirstOrDefault(e => e.EduId == id);
 
             if (edu == null)
                 return NotFound();
@@ -81,11 +99,16 @@ namespace PortfolioUsingASP.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Education edu)
         {
-            var existing = educationList.FirstOrDefault(e => e.EduId == edu.EduId);
+            if (HttpContext.Session.GetString("Admin") != "true")
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            var existing = _context.Educations.FirstOrDefault(e => e.EduId == edu.EduId);
 
             if (existing != null)
             {
-                educationList.Remove(existing);
+                _context.Educations.Remove(existing);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index");
